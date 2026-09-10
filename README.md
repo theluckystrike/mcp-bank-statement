@@ -1,14 +1,45 @@
 # mcp-bank-statement
 
+<!-- mirror-seo:start -->
+
+**MCP server for bank statement parsing, categorisation and bank reconciliation.** Bank CSV exports categorised, summarised and reconciled with expenses.
+
+Works with Claude Desktop, Claude Code, Cursor and any Model Context Protocol client. Runs on your own machine, or hosted with no install.
+
+## Install
+
+**Hosted, nothing to install.** Point an MCP client at `https://mcp.zovo.one/mcp/bank-statement` over streamable-http and send `Authorization: Bearer <token>`, where the token is a Pro key or a free anonymous one from <https://mcp.zovo.one/mcp/token>.
+
+**Claude Desktop, one click.** Download `bank-statement.mcpb` from the [latest release](https://github.com/theluckystrike/mcp-servers/releases/latest) and double-click it.
+
+**From source.** The mirror is self-contained: every `@theluckystrike/*` dependency is vendored, so a fresh clone builds with no extra setup.
+
+```sh
+git clone https://github.com/theluckystrike/mcp-bank-statement.git
+cd mcp-bank-statement
+npm install && npm run build
+```
+
+Then point your client at the built entry point:
+
+```json
+{
+  "mcpServers": {
+    "bank-statement": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-bank-statement/dist/index.js"]
+    }
+  }
+}
+```
+
+> `@theluckystrike/mcp-bank-statement` is **not published on npm yet**, so an `npx -y @theluckystrike/mcp-bank-statement` command will fail. The three paths above are the working ones and each is exercised by CI.
+
 ![bank-statement demo](https://raw.githubusercontent.com/theluckystrike/mcp-servers/main/assets/demo-bank-statement.gif)
-
-**One-click install:** download `bank-statement.mcpb` from the [latest release](https://github.com/theluckystrike/mcp-servers/releases/latest) and double-click it in Claude Desktop.
-
-**Hosted endpoint (no install):** `https://mcp.zovo.one/mcp/bank-statement` (streamable-http; send `Authorization: Bearer <Pro key or anonymous token from https://mcp.zovo.one/mcp/token>`).
 
 Read-only mirror of [mcp-servers/servers/bank-statement](https://github.com/theluckystrike/mcp-servers/tree/main/servers/bank-statement). See [MIRROR.md](MIRROR.md).
 
-
+<!-- mirror-seo:end -->
 
 Export the CSV from your bank, say "import this", and the month is readable. This MCP server turns a bank export into a local ledger: it finds the header row under whatever preamble the bank prints above it, works out which column is the date, which is the money and which way the money went, and reads amounts in the file's own locale, so `1 234,56` from mBank and `1,234.56` from a US bank both become the same number. A debit is stored negative and a credit positive, once, at import, so nothing downstream has to guess. Re-importing the same export adds nothing: every line carries a hash of its date, amount, currency and description, with an occurrence index, so two identical coffees on one day stay two transactions while a second import of the same file stays zero. Your rules categorise transactions as they arrive, summaries report money in, money out and the net per currency and never mix currencies, `recurring_detect` finds the subscriptions and what each costs per year, and `reconcile_expenses` matches bank debits against the receipts in `mcp-expense-tracker` so you can see which debits have no receipt and which receipts never reached the bank. Everything is a plain JSON file on your own machine; nothing is uploaded anywhere.
 
