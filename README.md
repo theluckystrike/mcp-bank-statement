@@ -2,7 +2,7 @@
 
 <!-- mirror-seo:start -->
 
-**MCP server for bank statement parsing, categorisation and bank reconciliation.** Bank CSV exports categorised, summarised and reconciled with expenses.
+**MCP server for reading bank statement CSV exports to read, categorise and reconcile transactions.** Bank CSV exports categorised, summarised and reconciled with expenses.
 
 Works with Claude Desktop, Claude Code, Cursor and any Model Context Protocol client. Runs on your own machine, or hosted with no install.
 
