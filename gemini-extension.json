@@ -1,6 +1,6 @@
 {
   "name": "mcp-bank-statement",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "MCP server for reading bank statement CSV exports to read, categorise and reconcile transactions. Bank CSV exports categorised, summarised and reconciled with expenses.",
   "settings": [
     {
